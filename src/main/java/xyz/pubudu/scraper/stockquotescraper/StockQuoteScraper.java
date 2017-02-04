@@ -31,8 +31,18 @@ public class StockQuoteScraper {
     public static final Logger log = LogManager.getLogger(StockQuoteScraper.class);
 
     public static void main(String[] args) throws IOException {
+        switch (args[0]) {
+            case "-u":
+                new URLGenerator().generate(args[1], args[2]);
+                break;
+            default:
+                new StockQuoteScraper().runScraper(args[0]);
+        }
+    }
+
+    public void runScraper(String urlsFile) throws IOException {
         CloseableHttpClient httpclient = HttpClients.createDefault();
-        File urls = new File(args[0]);
+        File urls = new File(urlsFile);
         Scanner in = new Scanner(urls);
 
         while (in.hasNextLine()) {
@@ -52,7 +62,6 @@ public class StockQuoteScraper {
                 e.printStackTrace();
             }
         }
-
     }
 
     public static void processResponse(CloseableHttpResponse response) throws IOException {
